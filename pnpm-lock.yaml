@@ -35,6 +35,9 @@ importers:
       husky:
         specifier: ^9.1.7
         version: 9.1.7
+      lz-string:
+        specifier: ^1.5.0
+        version: 1.5.0
       prettier:
         specifier: ^3.8.3
         version: 3.8.3
@@ -1401,6 +1404,11 @@ packages:
   loose-envify@1.4.0:
     resolution:
       { integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q== }
+    hasBin: true
+
+  lz-string@1.5.0:
+    resolution:
+      { integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ== }
     hasBin: true
 
   math-intrinsics@1.1.0:
@@ -3223,6 +3231,8 @@ snapshots:
   loose-envify@1.4.0:
     dependencies:
       js-tokens: 4.0.0
+
+  lz-string@1.5.0: {}
 
   math-intrinsics@1.1.0: {}
 
