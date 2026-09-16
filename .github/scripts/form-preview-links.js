@@ -6,13 +6,21 @@
 // against untrusted pull request commits.
 
 import { execFileSync } from 'node:child_process';
-import { writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 
-import lz from 'lz-string';
+// @opendatacapture/playground-url publishes raw TypeScript as its import entry
+// (and relies on a dependency it does not declare for consumers), so it cannot
+// be imported here. Its compiled CLI is the supported standalone interface;
+// resolve it relative to the package entry so it works whatever the install layout.
+const PLAYGROUND_URL_CLI = path.resolve(
+  path.dirname(createRequire(import.meta.url).resolve('@opendatacapture/playground-url')),
+  '../dist/cli.js'
+);
 
 const FORMS_DIR = 'lib/forms';
-const PLAYGROUND_URL = 'https://playground.opendatacapture.org';
 const TEXT_EXTENSIONS = new Set(['.css', '.html', '.js', '.json', '.jsx', '.ts', '.tsx']);
 
 // GitHub rejects comments longer than 65536 characters
@@ -36,17 +44,35 @@ function gitPaths(args) {
     .filter(Boolean);
 }
 
-/** @param {{ content: string, name: string }[]} files */
-function encodeFiles(files) {
-  return lz.compressToEncodedURIComponent(JSON.stringify(files));
-}
-
-/** @param {{ files: { content: string, name: string }[], label: string }} instrument */
-function encodeShareURL({ files, label }) {
-  const url = new URL(PLAYGROUND_URL);
-  url.searchParams.append('files', encodeFiles(files));
-  url.searchParams.append('label', lz.compressToEncodedURIComponent(label));
-  return url;
+/**
+ * Encode an instrument's source files into a playground share link.
+ *
+ * The CLI reads an instrument from a directory, so the files (already read from
+ * git objects) are written to a throwaway directory — as data, never executed —
+ * because only the pull request's base branch is checked out. The URL is printed
+ * to stdout; status and warnings go to stderr, which we forward to our own.
+ * @param {{ content: string, name: string }[]} files
+ * @param {string} label
+ */
+function generatePlaygroundURL(files, label) {
+  const dir = mkdtempSync(path.join(tmpdir(), 'odc-form-'));
+  try {
+    for (const file of files) {
+      const dest = path.resolve(dir, file.name);
+      // Defence in depth against a crafted path escaping the temp directory.
+      if (dest !== dir && !dest.startsWith(dir + path.sep)) {
+        throw new Error(`Refusing to write outside the temp directory: ${file.name}`);
+      }
+      mkdirSync(path.dirname(dest), { recursive: true });
+      writeFileSync(dest, file.content);
+    }
+    return execFileSync(process.execPath, [PLAYGROUND_URL_CLI, dir, '--label', label], {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'inherit']
+    }).trim();
+  } finally {
+    rmSync(dir, { force: true, recursive: true });
+  }
 }
 
 const [baseSha, headSha, outputFile] = process.argv.slice(2);
@@ -82,7 +108,7 @@ if (changedForms.length === 0) {
       skipped.push(`- **${formName}**: no \`index\` entrypoint found`);
       continue;
     }
-    const entry = `- **${formName}**: [Open in playground](${encodeShareURL({ files, label: formName })})`;
+    const entry = `- **${formName}**: [Open in playground](${generatePlaygroundURL(files, formName)})`;
     if ([...lines, entry].join('\n').length > MAX_COMMENT_LENGTH) {
       skipped.push(`- **${formName}**: link too long to include in a comment`);
       continue;
