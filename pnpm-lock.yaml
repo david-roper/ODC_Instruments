@@ -23,6 +23,9 @@ importers:
       '@opendatacapture/instrument-guidelines':
         specifier: ^2.0.0
         version: 2.0.0
+      '@opendatacapture/playground-url':
+        specifier: ^2.3.1
+        version: 2.3.1
       '@opendatacapture/serve-instrument':
         specifier: ^2.0.0
         version: 2.0.0(@opendatacapture/runtime-v1@2.0.0)
@@ -35,9 +38,6 @@ importers:
       husky:
         specifier: ^9.1.7
         version: 9.1.7
-      lz-string:
-        specifier: ^1.5.0
-        version: 1.5.0
       prettier:
         specifier: ^3.8.3
         version: 3.8.3
@@ -355,6 +355,11 @@ packages:
   '@opendatacapture/instrument-guidelines@2.0.0':
     resolution:
       { integrity: sha512-YkqIISuNHW3WOoA1Fqax5GUTg4imjhLlZvZkMaVj7ER88FATVmaCf1kYZKPVF0mdY3ty8XkOfjZJSI3BCbShPw== }
+    hasBin: true
+
+  '@opendatacapture/playground-url@2.3.1':
+    resolution:
+      { integrity: sha512-TVi+3tJdp1rqqWEhoPCQZ32Q+Hs0FnavxjtnQiJkS21XeyJkC4bhKOgWoxH+7juENvaGyJyLPGzXzSkGrdZfxQ== }
     hasBin: true
 
   '@opendatacapture/runtime-v1@2.0.0':
@@ -2140,6 +2145,12 @@ snapshots:
       fastq: 1.19.1
 
   '@opendatacapture/instrument-guidelines@2.0.0': {}
+
+  '@opendatacapture/playground-url@2.3.1':
+    dependencies:
+      chalk: 5.6.2
+      commander: 12.1.0
+      lz-string: 1.5.0
 
   '@opendatacapture/runtime-v1@2.0.0': {}
 
