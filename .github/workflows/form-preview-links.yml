@@ -4,6 +4,13 @@ name: Form Preview Links
 # PRs opened from forks. The workflow and script always come from the base branch,
 # and the PR's files are only read as data via git, never installed or executed.
 on:
+  # TEMPORARY — test branch only, DO NOT MERGE. pull_request lets us exercise the
+  # workflow on a same-repo PR (which gets a write token) before it lives on the
+  # default branch, where pull_request_target below can finally trigger.
+  pull_request:
+    types: [opened, reopened, synchronize]
+    paths:
+      - 'lib/forms/**'
   pull_request_target:
     types: [opened, reopened, synchronize]
     paths:
