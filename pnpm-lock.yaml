@@ -23,6 +23,9 @@ importers:
       '@opendatacapture/instrument-guidelines':
         specifier: ^2.0.0
         version: 2.0.0
+      '@opendatacapture/playground-url':
+        specifier: ^2.3.1
+        version: 2.3.1
       '@opendatacapture/serve-instrument':
         specifier: ^2.0.0
         version: 2.0.0(@opendatacapture/runtime-v1@2.0.0)
@@ -352,6 +355,11 @@ packages:
   '@opendatacapture/instrument-guidelines@2.0.0':
     resolution:
       { integrity: sha512-YkqIISuNHW3WOoA1Fqax5GUTg4imjhLlZvZkMaVj7ER88FATVmaCf1kYZKPVF0mdY3ty8XkOfjZJSI3BCbShPw== }
+    hasBin: true
+
+  '@opendatacapture/playground-url@2.3.1':
+    resolution:
+      { integrity: sha512-TVi+3tJdp1rqqWEhoPCQZ32Q+Hs0FnavxjtnQiJkS21XeyJkC4bhKOgWoxH+7juENvaGyJyLPGzXzSkGrdZfxQ== }
     hasBin: true
 
   '@opendatacapture/runtime-v1@2.0.0':
@@ -1403,6 +1411,11 @@ packages:
       { integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q== }
     hasBin: true
 
+  lz-string@1.5.0:
+    resolution:
+      { integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ== }
+    hasBin: true
+
   math-intrinsics@1.1.0:
     resolution:
       { integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g== }
@@ -2132,6 +2145,12 @@ snapshots:
       fastq: 1.19.1
 
   '@opendatacapture/instrument-guidelines@2.0.0': {}
+
+  '@opendatacapture/playground-url@2.3.1':
+    dependencies:
+      chalk: 5.6.2
+      commander: 12.1.0
+      lz-string: 1.5.0
 
   '@opendatacapture/runtime-v1@2.0.0': {}
 
@@ -3223,6 +3242,8 @@ snapshots:
   loose-envify@1.4.0:
     dependencies:
       js-tokens: 4.0.0
+
+  lz-string@1.5.0: {}
 
   math-intrinsics@1.1.0: {}
 
